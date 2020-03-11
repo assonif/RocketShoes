@@ -1,155 +1,73 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { MdShoppingCart } from 'react-icons/md';
+import { formatPrice } from '../../util/format';
+import api from '../../services/api';
+
+import * as CartActions from '../../store/modules/cart/actions';
 
 import { ProductList } from './styles';
 
-export default function Home() {
-  return (
-    <ProductList>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
+class Home extends Component {
+  state = {
+    products: [],
+  };
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
+  async componentDidMount() {
+    const response = await api.get('products');
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
+    const data = response.data.map(product => ({
+      ...product,
+      priceFormatted: formatPrice(product.price),
+    }));
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
+    this.setState({ products: data });
+  }
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
+  handleAddProduct = product => {
+    const { addToCart } = this.props;
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
+    addToCart(product);
+  };
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
+  render() {
+    const { products } = this.state;
+    const { amount } = this.props;
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
+    return (
+      <ProductList>
+        {products.map(product => (
+          <li key={product.id}>
+            <img src={product.image} alt={product.title} />
+            <strong>{product.title}</strong>
+            <span>{product.priceFormatted}</span>
 
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
+            <button
+              type="button"
+              onClick={() => this.handleAddProduct(product)}
+            >
+              <div>
+                <MdShoppingCart size={16} color="#fff" />
+                {amount[product.id] || 0}
+              </div>
 
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-nike-sb-check-solar-cnvs-masculino/77/D12-2759-977/D12-2759-977_zoom2.jpg?ims=326x"
-          alt="Tênis"
-        />
-        <strong>Tênis nike SB</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdShoppingCart size={16} color="#fff" />
-          </div>
-
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-    </ProductList>
-  );
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+          </li>
+        ))}
+      </ProductList>
+    );
+  }
 }
+const mapStateToProps = state => ({
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount || 0;
+    return amount;
+  }, {}),
+});
+
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
